@@ -3,25 +3,30 @@ package player
 import (
 	"fmt"
 	"os/exec"
+	"strings"
 	"time"
 )
 
 func StartMPV(filename string) *exec.Cmd {
-	cmd := exec.Command("mpv", "--input-ipc-server=/tmp/mpvsocket", filename)
+	cmd := exec.Command("mpv", "--input-ipc-server=/tmp/mpvsocket", "--idle", filename)
 	cmd.Start()
-	time.Sleep(time.Second)
+	// Wait a moment for the socket to be created
+	time.Sleep(time.Second) 
 	return cmd
 }
 
-func PauseMPV() {
+// SendMPVCommand sends a raw JSON IPC command to the mpv socket.
+func SendMPVCommand(command string) {
 	socket := "/tmp/mpvsocket"
-	cmd := exec.Command("echo", `{"command": ["cycle", "pause"]}`)
-	mpv := exec.Command("socat", "-", fmt.Sprintf("UNIX-CONNECT:%s", socket))
-	pipe, _ := cmd.StdoutPipe()
-	cmd.Start()
-	mpv.Stdin = pipe
-	mpv.Start()
-	cmd.Wait()
-	mpv.Wait()
+	cmd := exec.Command("socat", "-", fmt.Sprintf("UNIX-CONNECT:%s", socket))
+	cmd.Stdin = strings.NewReader(command)
+	
+	// We run and wait for socat to complete.
+	// We can add error logging here in the future.
+	cmd.Run()
 }
 
+// PauseMPV now uses the generic SendMPVCommand
+func PauseMPV() {
+	SendMPVCommand(`{"command": ["cycle", "pause"]}`)
+}

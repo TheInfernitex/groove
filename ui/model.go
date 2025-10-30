@@ -46,20 +46,23 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.Selected++
 			}
 		case "enter", " ":
-			m.Playing = !m.Playing
-			m.CurrentFile = m.Files[m.Selected]
-			if m.Playing {
-				// Start MPV and store the process
-				m.MPVProcess = player.StartMPV(m.CurrentFile)
-			} else {
-				// Pause the MPV process
-				player.PauseMPV()
+			selectedFile := m.Files[m.Selected]
+
+			// Case 1: No process is active OR a different song is selected
+			if m.MPVProcess == nil || m.CurrentFile != selectedFile {
+				// Kill old process if it exists (for the "different song" case)
 				if m.MPVProcess != nil {
-					m.MPVProcess.Process.Kill() 
-					m.MPVProcess = nil     
+					m.MPVProcess.Process.Kill()
 				}
+				// Start new song
+				m.CurrentFile = selectedFile
+				m.MPVProcess = player.StartMPV(m.CurrentFile)
+				m.Playing = true
+			} else {
+				// Case 2: A process for this song is already active, so just toggle pause
+				player.PauseMPV()
+				m.Playing = !m.Playing // Toggle the playing state
 			}
-		}
 	}
 	return m, nil
 }
