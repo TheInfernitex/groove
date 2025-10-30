@@ -63,12 +63,20 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				player.PauseMPV()
 				m.Playing = !m.Playing // Toggle the playing state
 			}
+		case "+", "=": // Use "=" as well, since "+" often requires Shift
+			player.IncreaseVolume()
+		case "-":
+			player.DecreaseVolume()
+		}
 	}
 	return m, nil
 }
 
 func (m Model) View() string {
-	s := "🎵 Groove Player\n\nUse ↑/↓ to navigate, [Enter] or [Space] to play/pause\n\n"
+	s := "🎵 Groove Player\n\n"
+	s += "Use ↑/↓ to navigate\n"
+	s += "[Enter] or [Space] to play/pause\n"
+	s += "[+/-] to change volume\n\n"
 
 	for i, file := range m.Files {
 		cursor := "  "
