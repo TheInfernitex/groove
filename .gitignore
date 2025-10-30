@@ -1,0 +1,26 @@
+# Compiled binaries for the current project
+# The executable will typically have the same name as the project directory
+groove
+
+# Binaries for sub-packages
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test output
+*_test
+
+# Dependency directories
+vendor/
+
+# Package generated files
+/pkg/
+
+# IntelliJ/GoLand and VS Code files
+.idea/
+.vscode/
+
+# MPV IPC Socket
+# This is crucial! We don't want to track the temporary socket file.
+/tmp/mpvsocket
