@@ -3,7 +3,7 @@ package ui
 import (
 	"fmt"
 	"io/fs"
-	"os"
+	// "os"
 	"os/exec"
 	"path/filepath"
 	"strings"

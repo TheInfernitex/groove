@@ -24,3 +24,5 @@ vendor/
 # MPV IPC Socket
 # This is crucial! We don't want to track the temporary socket file.
 /tmp/mpvsocket
+
+*.mp3

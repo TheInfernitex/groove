@@ -8,7 +8,7 @@ A terminal-based music player built with Go, [Bubbletea](https://github.com/char
 
 ## ✨ Features
 
-- Scans the current directory for `.mp3` files.
+- Scans the current directory **and subdirectories** for `.mp3` files (Recursive Scan).
 - Interactive TUI to select, play, and pause/unpause songs.
 - Real-time volume control.
 
@@ -41,7 +41,6 @@ go run .
 
 ## 📌 Upcoming Features
 
-- Recursive file browser to choose music (not just root)
 - Visual song progress bar
 - Visual volume slider
 - Lipgloss UI styling for a polished look
