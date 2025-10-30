@@ -2,8 +2,10 @@ package ui
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/TheInfernitex/groove/player"
@@ -96,15 +98,26 @@ func (m Model) View() string {
 
 func getMP3Files(dir string) []string {
 	var files []string
-	entries, err := os.ReadDir(dir)
-	if err != nil {
-		return files
-	}
-	for _, entry := range entries {
-		if !entry.IsDir() && strings.HasSuffix(entry.Name(), ".mp3") {
-			files = append(files, entry.Name())
+	
+	// filepath.WalkDir walks the file tree rooted at dir
+	filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return nil
 		}
-	}
+		
+		// Skip directories
+		if d.IsDir() {
+			return nil
+		}
+		
+		// Check if the file is an .mp3
+		if strings.HasSuffix(d.Name(), ".mp3") {
+			files = append(files, path)
+		}
+		
+		return nil
+	})
+	
 	return files
 }
 
