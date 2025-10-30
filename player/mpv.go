@@ -30,3 +30,13 @@ func SendMPVCommand(command string) {
 func PauseMPV() {
 	SendMPVCommand(`{"command": ["cycle", "pause"]}`)
 }
+
+// IncreaseVolume increases the MPV volume.
+func IncreaseVolume() {
+	SendMPVCommand(`{"command": ["add", "volume", "5"]}`)
+}
+
+// DecreaseVolume decreases the MPV volume.
+func DecreaseVolume() {
+	SendMPVCommand(`{"command": ["add", "volume", "-5"]}`)
+}
