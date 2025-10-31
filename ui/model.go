@@ -81,20 +81,26 @@ func (m Model) View() string {
 	s += "[+/-] to change volume\n\n"
 
 	for i, file := range m.Files {
-		cursor := "  "
+		// selected item
 		if m.Selected == i {
-			cursor = "👉"
+			s += SelectedItemStyle.Render(fmt.Sprintf("👉 %s", file)) + "\n"
+
+		} else {
+			s += fmt.Sprintf("   %s\n", file)
 		}
-		line := fmt.Sprintf("%s %s\n", cursor, file)
-		s += line
 	}
 
 	if m.Playing {
-		s += fmt.Sprintf("\nNow Playing: %s\n", m.CurrentFile)
+		s += "\n"
+		s += NowPlayingLabelStyle.Render("Now Playing:")
+		s += NowPlayingTitleStyle.Render(" " + m.CurrentFile) + "\n"
+
 	}
+
 	s += "\nPress Q to quit.\n"
 	return s
 }
+
 
 func getMP3Files(dir string) []string {
 	var files []string
